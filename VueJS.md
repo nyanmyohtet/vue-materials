@@ -1,19 +1,5 @@
 # VueJS
 
-# Introduction
-
-## Declarative Rendering(skiped)
-
-## Handling User Input(skiped)
-
-## Conditionals and Loops(skiped)
-
-## Composing with Components(skiped)
-
-***
-
-<div style="page-break-after: always;"></div>
-
 # Application & Component Instances
 
 ## Creating an Application Instance
@@ -28,7 +14,7 @@ const app = Vue.createApp({
 
 ## The Root Component
 
-- The options passed to createApp are used to configure the root component.
+- The `options` passed to createApp are used to configure the root component.
 - The starting point for rendering when we mount the application.
 
 ```javascript
@@ -36,12 +22,12 @@ const RootComponent = {
   /* options */
 }
 const app = Vue.createApp(RootComponent)
-const vm = app.mount('#app')
+app.mount('#app')
 ```
 
 ## Component Instance Properties
 
-Properties defined in data are exposed via the component instance:
+Properties defined in `data` are exposed via the component instance:
 
 ```javascript
 const app = Vue.createApp({
@@ -60,11 +46,11 @@ console.log(vm.count) // => 4
 ## Lifecycle Hooks
 
 - Each component instance goes through a series of initialization steps when it's created
-  - set up data observation,
-  - compile the template,
-  - mount the instance to the DOM, and
-  - update the DOM when data changes.
-  - also runs functions called `lifecycle hooks`, to add their own code at specific stages.
+  - **set up** data observation,
+  - **compile** the template,
+  - **mount** the instance to the DOM, and
+  - **update** the DOM when data changes.
+  - also **runs** functions called `lifecycle hooks`, to add their own code at specific stages.
 
 ```javascript
 Vue.createApp({
@@ -103,8 +89,6 @@ Vue.createApp({
 <button v-bind:disabled="isButtonDisabled">Button</button>
 ```
 
-## Raw HTML (skiped)
-
 ## Using JavaScript Expressions
 
 ```html
@@ -120,7 +104,7 @@ Vue.createApp({
 ## Directives
 
 - Directives are special attributes with the `v-` prefix.
-- A directive's job is to reactively apply side effects to the DOM when the value of its expression changes.
+- A directive's job is to *reactively* apply side effects to the DOM when the value of its expression changes.
 
 ```html
 <p v-if="seen">Now you see me</p>
@@ -137,8 +121,6 @@ Vue.createApp({
 ```
 
 <div style="page-break-after: always;"></div>
-
-## Dynamic Arguments (skiped)
 
 ## Modifiers
 
@@ -169,8 +151,6 @@ v-bind Shorthand
 <!-- shorthand -->
 <a @click="doSomething"> ... </a>
 ```
-
-***
 
 <div style="page-break-after: always;"></div>
 
@@ -235,24 +215,6 @@ vm.increment()
 console.log(vm.count) // => 5
 ```
 
-***
-
-# Computed Properties and Watchers (pending)
-
-## Computed Properties
-
-## Watcher
-
-***
-
-# Class and Style Bindings (pending)
-
-## Binding HTML Classes
-
-## Binding Inline Styles
-
-***
-
 <div style="page-break-after: always;"></div>
 
 # Conditional Rendering
@@ -298,9 +260,8 @@ console.log(vm.count) // => 5
 
 ## v-if with v-for
 
+- When v-if and v-for are both used on the same element, v-if will be evaluated first.
 - Using v-if and v-for together is not recommended.
-
-***
 
 <div style="page-break-after: always;"></div>
 
@@ -333,12 +294,6 @@ Vue.createApp({
 }).mount('#array-with-index')
 ```
 
-## v-for on a `<template>`(skiped)
-
-## v-for with v-if(skiped, duplicate content)
-
-***
-
 <div style="page-break-after: always;"></div>
 
 # Event Handling
@@ -350,7 +305,7 @@ Vue.createApp({
 
 Benefits:
 
-- easier to locate the handler function implementations within JS code by skimming the HTML template.
+- Easier to locate the handler function implementations within JS code by skimming the HTML template.
 - Don't have to manually attach event listeners in JS.
 - When a ViewModel is destroyed, all event listeners are automatically removed. Don't need to worry about cleaning it up.
 
@@ -385,23 +340,8 @@ Vue.createApp({
 ## Event Modifiers
 
 - It would be better if the methods can be purely about data logic rather than having to deal with DOM event details.
-- Vue provides event modifiers for v-on.
+- Vue provides event modifiers for `v-on`.
   - .stop
   - .prevent, etc.
 
-
-***
-
-# Form Input Bindings
-
-## Basic Usage
-
-## Value Bindings
-
-## Modifiers
-
-***
-
-# Components Basics
-
-## v-for with a component
+<div style="page-break-after: always;"></div>
