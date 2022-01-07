@@ -10,7 +10,7 @@ Run the following command in PowerShell to install VueCLI:
 npm install -g @vue/cli
 ```
 
-![VueCLI Install.png](_resources\vue-cli-install.png)
+![VueCLI Install.png](_resources/vue-cli-install.png)
 
 Create a Vue project:
 
@@ -22,15 +22,15 @@ vue ui
 
 Error:
 
-![vue-create-error-1.png](_resources\vue-create-error-1.png)
+![vue-create-error-1.png](_resources/vue-create-error-1.png)
 
 Solution:
 
-![vue-create-error-1-solution.png](_resources\vue-create-error-1-solution.png)
+![vue-create-error-1-solution.png](_resources/vue-create-error-1-solution.png)
 
 Select a preset:
 
-![pick-a-preset.png](_resources\pick-a-preset.png)
+![pick-a-preset.png](_resources/pick-a-preset.png)
 
 manually-select-features:
 
