@@ -33,3 +33,7 @@
 # Components Basics
 
 ## v-for with a component
+
+***
+
+# Listening to Child Components Events
