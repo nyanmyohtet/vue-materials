@@ -1,8 +1,8 @@
-## Vue CLI
+# Vue CLI
 
 https://cli.vuejs.org
 
-### Installation
+## Installation
 
 Run the following command in PowerShell to install VueCLI:
 
@@ -10,60 +10,45 @@ Run the following command in PowerShell to install VueCLI:
 npm install -g @vue/cli
 ```
 
-![VueCLI Install.png](_resources/vue-cli-install.png)
-
-Create a Vue project:
-
-```
-vue create my-project
-# OR
-vue ui
-```
-
-Error:
-
-![vue-create-error-1.png](_resources/vue-create-error-1.png)
-
-Solution:
-
-![vue-create-error-1-solution.png](_resources/vue-create-error-1-solution.png)
-
-Select a preset:
-
-![pick-a-preset.png](_resources/pick-a-preset.png)
-
-manually-select-features:
-
-![manually-select-features.png](_resources/manually-select-features.png)
-
-choose-vue-version:
-
-![choose-vue-version.png](_resources/choose-vue-version.png)
-
-placing-config:
-
-![placing-config.png](_resources/placing-config.png)
-
-yarn-need-to-install-error:
-
-![yarn-need-to-install-error.png](_resources/yarn-need-to-install-error.png)
-
+## Install yarn
 
 Install yarn by running `npm install --global yarn`
 
-finish-vue-create-and-yarn-serve:
+## Create a new Vue project:
 
-![finish-vue-create-and-yarn-serve.png](_resources/finish-vue-create-and-yarn-serve.png)
+```
+vue create my-project
+```
 
-yarn.ps1-cannot-loaded:
+<div style="page-break-after: always;"></div>
+
+## If following error occurs.
+
+![vue-create-error-1.png](_resources/vue-create-error-1.png)
+
+Solution: run as follow.
+
+![vue-create-error-1-solution.png](_resources/vue-create-error-1-solution.png)
+
+<div style="page-break-after: always;"></div>
+
+## Change to new project directory(`cd <dir>`) and run `yarn serve`
+
+<img src="_resources/finish-vue-create-and-yarn-serve.png" alt="finish-vue-create-and-yarn-serve" width="850"/>
+
+<div style="page-break-after: always;"></div>
+
+## If following eror occurs.
 
 ![yarn.ps1-cannot-loaded.png](_resources/yarn.ps1-cannot-loaded.png)
 
-powershell-set-execution-policies (Open PowerShell as Administrator):
+Solve by setting Execution Policies in PowerShell (Need to run PowerShell as **Administrator**):
 
 ![powershell-set-execution-policies.png](_resources/powershell-set-execution-policies.png)
 
-vue-app-is-running at http://localhost:8080:
+<div style="page-break-after: always;"></div>
+
+Newly created Vue App is running at http://localhost:8080.
 
 ![vue-app-is-running.png](_resources/vue-app-is-running.png)
 
