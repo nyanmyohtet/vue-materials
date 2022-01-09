@@ -1,6 +1,6 @@
 # Components Basics
 
-- Accept the same options as a root instance, such as `data`, `computed`, `watch`, `methods`, and `lifecycle hooks`.
+Components are reusable instances with a name: in this case, `<button-counter>`.
 
 Example of a Vue component:
 
@@ -26,14 +26,15 @@ app.component('button-counter', {
       You clicked me {{ count }} times.
     </button>`
 })
-
 app.mount('#components-demo')
 ```
 <div style="page-break-after: always;"></div>
 
 # Reusing Components
 
-Components can be reused as many times as you want:
+Components can be reused as many times as you want.
+
+Each one maintains its own **state/date**.
 
 ```html
 <div id="components-demo">
@@ -42,9 +43,6 @@ Components can be reused as many times as you want:
   <button-counter></button-counter>
 </div>
 ```
-
-- Each one maintains its own, separate count.
-- Whenever reuse a component, a new instance of it is created.
 
 <div style="page-break-after: always;"></div>
 
@@ -84,129 +82,40 @@ app.mount('#blog-post-demo')
 
 <div style="page-break-after: always;"></div>
 
-In a typical app:
-
-```html
-<div id="blog-posts-demo">
-  <blog-post
-    v-for="post in posts"
-    :key="post.id"
-    :title="post.title"
-  ></blog-post>
-</div>
-```
-
-```javascript
-const App = {
-  data() {
-    return {
-      posts: [
-        { id: 1, title: 'My journey with Vue' },
-        { id: 2, title: 'Blogging with Vue' },
-        { id: 3, title: 'Why Vue is so fun' }
-      ]
-    }
-  }
-}
-const app = Vue.createApp(App)
-
-app.component('blog-post', {
-  props: ['title'],
-  template: `<h4>{{ title }}</h4>`
-})
-app.mount('#blog-posts-demo')
-```
-
-- use `v-bind` to dynamically pass props.
-
-<div style="page-break-after: always;"></div>
-
 # Component anatomy
 
 ```javascript
 Vue.component('my-component', {
-  components: {
-    // Components that can be used in the template
+  components: { // Components that can be used in the template
     ProductComponent,
     ReviewComponent
   },
-  props: {
-    // The parameters the component accepts
+  props: { // The parameters the component accepts
     message: String,
     product: Object,
     email: {
       type: String,
       required: true,
-      default: "none"
-      validator: function (value) {
-        // Should return true if value is valid
-      }
+      default: "none",
+      validator (value) { // Should return true if value is valid }
     }
   },
-  data() {
-    // `data` must be a function and return object
+  data() { // `data` must be a function and return object
     return {
       firstName: 'Vue',
-      lastName: 'Mastery'
+      lastName: 'JS'
     }
   },
-  computed: {
-    // Return cached values until dependencies change
-    fullName() {
-      return this.firstName + ' ' + this.lastName
-    }
+  computed: { // Return cached values until dependencies change
+    fullName() { return this.firstName + ' ' + this.lastName }
   },
   watch: {
-    // Called when firstName changes value
-    firstName(value, oldValue) { ... }
+    firstName(value, oldValue) { ... } // Called when firstName changes value
   },
   methods: { ... },
-  template: '<span>{{ message }}</span>',
-  // Can also use backticks in `template` for multi-line
+  template: '<span>{{ message }}</span>', // Can also use backticks in `template` for multi-line
 })
 ```
-
-<div style="page-break-after: always;"></div>
-
-# Lifecycle hooks
-
-- `beforeCreate`:	After the instance has been initialized.
-- `created`:	After the instance is created.
-- `beforeMount`:	Before the first render.
-- `mounted`:	After the instance has been mounted.
-- `beforeUpdate`:	When data changes, before the DOM is patched.
-- `updated`:	After a data change.
-- `beforeUnmount`:	Before the instance is destroyed.
-- `unmounted`:	After a Vue instance has been destroyed.
-
-<div style="page-break-after: always;"></div>
-
-# Custom events
-
-Set listener on component, within its parent
-
-```html
-<button-counter v-on:incrementBy="incWithVal">
-```
-
-Inside parent component
-
-```javascript
-methods: {
-  incWithVal(toAdd) { ... }
-}
-```
-
-Inside button-counter template
-
-```javascript
-this.$emit(
-    'incrementBy', // Custom event name
-    5 // Data sent up to parent
-  )
-```
-
-Use `props` to pass data into `child components`, `custom events` to pass data to `parent elements`.
 
 <div style="page-break-after: always;"></div>
 
@@ -243,10 +152,151 @@ p {
 
 ```html
 <template>
-  <div>This will be pre-compiled</div>
+  <div>Hello World!</div>
 </template>
 <script src="./my-component.js"></script>
 <style src="./my-component.css" scoped></style>
 ```
+
+<div style="page-break-after: always;"></div>
+
+# Lifecycle hooks
+
+## beforeCreate
+
+- After the instance has been **initialized**, before data observation and event/watcher setup.
+
+## created
+
+- Called after the instance is **created**.
+- The instance has finished processing the **options** which means the following have been set up:
+  - data observation,
+  - computed properties,
+  - methods,
+  - watch/event callbacks.
+
+## beforeMount
+
+- Called before the mounting begins.
+
+## mounted
+
+- Called after the instance has been mounted, where element, passed to `app.mount` is replaced by the newly created `vm.$el`.
+> Note that mounted does not guarantee that all child components have also been mounted.
+
+```javascript
+mounted() {
+  this.$nextTick(function () {
+    // Code that will run only after the
+    // entire view has been rendered
+  })
+}
+```
+
+## beforeUpdate
+
+- Called when **data changes**, before the DOM is patched.
+- A good place to access the existing DOM before an update.
+
+## updated
+
+- Called after a data change causes the virtual DOM to be **re-rendered** and **patched**.
+- The component's DOM will have been updated.
+> Note that updated does not guarantee that all child components have also been re-rendered.
+
+```javascript
+updated() {
+  this.$nextTick(function () {
+    // Code that will run only after the
+    // entire view has been re-rendered
+  })
+}
+```
+
+## beforeUnmount
+
+- Called before a component instance is unmounted.
+- At this stage the instance is still fully functional.
+
+## unmounted
+
+- Called after a component instance has been unmounted.
+- All **directives** of the component instance have been unbound,
+- All **event listeners** have been removed,
+- And all **child component instances** have also been unmounted.
+
+<div style="page-break-after: always;"></div>
+
+## Lifecycle Diagram
+
+<img src="_resources/vue-lifecycle.svg" alt="vue-lifecycle" width="350"/>
+
+<div style="page-break-after: always;"></div>
+
+Sample Code :
+
+```html
+<template>
+  <button @click="count++">Clicked {{count}} Count</button>
+</template>
+
+<script>
+export default {
+  name: 'App',
+  data() {
+    return { count: 0 }
+  },
+  beforeCreate() {
+    console.log('this.count: ', this.count) // count: undefined
+  },
+  created() {
+    console.log('this.count: ', this.count) // count: 0
+  },
+  beforeMount() {
+    console.log(this.$el) // null - At this point, this.$el has not been created yet.
+  },
+  mounted() {
+    console.log(this.$el.textContent) // Clicked 0 Count
+  },
+  beforeUpdate() {
+    console.log(this.$el.textContent) // Clicked 0 Count
+    console.log('this.count: ', this.count) // 1
+  },
+  updated() {
+    console.log(this.$el.textContent) // Clicked 1 Count
+  },
+}
+</script>
+```
+
+<div style="page-break-after: always;"></div>
+
+# Custom events
+
+Set listener on component, within its parent
+
+```html
+<button-counter v-on:increment-by="incWithVal">
+```
+
+Inside parent component
+
+```javascript
+methods: {
+  incWithVal(toAdd) { ... }
+}
+```
+
+Inside button-counter template
+
+```javascript
+this.$emit(
+    'increment-by', // Custom event name
+    5 // Data sent up to parent
+  )
+```
+
+- Use `props` to pass data into `child components`,
+- Use `custom events` to pass data to `parent elements`.
 
 <div style="page-break-after: always;"></div>
