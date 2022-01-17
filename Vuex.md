@@ -2,93 +2,93 @@
 
 - Vuex is a **state management pattern + library** for Vue.js applications.
 - It serves as a **centralized store** for all the components in an application.
-
-<div style="page-break-after: always;"></div>
-
-## Vuex Solves.
-- Passing props can be tedious for **deeply nested components**, and simply doesn't work for sibling components.
-- Difficult to reach for direct parent/child instance references or to mutate and synchronize **multiple copies of the state via events**.
-
-***
-
-- Extract the shared state out of the components, and manage it in a **global** singleton?
-- With this, our component tree becomes a big **view**, and any component can **access the state** or **trigger actions**, no matter where they are in the tree!
-
-<div style="page-break-after: always;"></div>
+- The data `store` in Vuex follows the same rules as the `data` in a Vue instance.
+- A `store` is basically a container that holds application **state**.
 
 ## When Should I Use It?
-
-- If your app is simple, you will most likely be fine without Vuex.
-- But if you are building a medium-to-large-scale SPA, you have to use Vuex.
-
-<div style="page-break-after: always;"></div>
-
-## Vuex Diagram
-
-<image src="_resources/vuex-lifecycle.png" alt="vuex-lifecycle">
+- Passing props can be tedious for **deeply nested components**, and simply doesn't work for sibling components.
+- Difficult to reach for direct parent/child instance references or to **mutate and synchronize multiple copies of the state via events**.
+- Extract the shared state out of the components, and manage it in a **global** singleton.
+- With this, component tree becomes a big **view**.
+- And any component can **access the state** or **trigger actions**, no matter where they are in the tree!
 
 <div style="page-break-after: always;"></div>
 
-## Getting Started
+## Setup `Vuex` in Project
 
-- At the center of every Vuex application is the **store**.
-- A "store" is basically a container that holds application **state**.
 
-A Vuex store different from a plain global object:
-
-- Vuex stores are **reactive** - When Vue components retrieve state from it, they will reactively and efficiently update if the store's state changes.
-- **Cannot directly mutate** the store's state. The only way to change a store's state is by explicitly committing mutations.
-
-<div style="page-break-after: always;"></div>
-
-## The Simple Store
-
-```javascript
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
-
-const store = new Vuex.Store({
-  state: {
-    count: 0
-  },
-  mutations: {
-    increment (state) {
-      state.count++
-    }
-  }
-})
+```
+npm install vuex@next --save
+or
+yarn add vuex@next --save
 ```
 
-Can access the state object as store.state, and trigger a state change with the store.commit method:
+<div style="page-break-after: always;"></div>
+
+## Setup `vuex` in `main.js`
 
 ```javascript
-store.commit('increment')
+// main.js
+import { createApp } from 'vue'
+import store from './store' // import `store/index.js` file
+import App from './App.vue'
 
-console.log(store.state.count) // -> 1
+createApp(App)
+  .use(store) // use vuex store
+  .mount('#app')
+```
+
+<div style="page-break-after: always;"></div>
+
+## Create New `store/index.js`.
+
+Then, setup vuex store inside `store/index.js` file.
+
+```javascript
+// store/index.js
+import { createStore } from 'vuex'
+
+export default createStore({
+  state: {
+    showForm: true,
+    todos: [],
+  },
+  getters: {
+    todoCount(state) { // calculate the count of todos and return it
+      return state.todos.length
+    }
+  },
+  mutations: {
+    toggleForm(state) { // mutate/change the state of store
+      state.showForm = !state.showForm
+    }
+  },
+  actions: {
+  },
+  modules: {
+  }
+})
 ```
 
 <div style="page-break-after: always;"></div>
 
 ## Inject `this.$store` into VueJS App
 
-Vuex has a mechanism to **inject** the store into all child components from the root component with the store option(enabled by Vue.use(Vuex)):
+Vuex has a mechanism to **inject** the store into all child components from the root component with the store option(enabled by `Vue.use(Vuex)`):
 
 ```javascript
 // App Root Component
 const app = new Vue({
-  el: '#app',
   // provide the store using the "store" option.
   // this will inject the store instance to all child components.
-  store, // shorthand of `store: store`
+  store, // shorthand syntax of `store: store`
   components: { Counter },
   template: `
     <div class="app">
       <counter></counter>
     </div>
   `
-})
+}).mount('#app')
 ```
 
 By providing the `store` option to the root instance, the `store` will be injected into all child components of the root and will be available on them as `this.$store`.
@@ -104,35 +104,28 @@ const Counter = {
 }
 ```
 
-Now we can commit a mutation from component's method:
+<div style="page-break-after: always;"></div>
+
+Now we can **commit** a mutation from component's method:
 
 ```javascript
 ...
 methods: {
   increment() {
     this.$store.commit('increment')
-    console.log(this.$store.state.count)
+    console.log(this.$store.state.count) // 1
   }
 }
 ...
 ```
 
-- Using store state in a component simply involves returning the state within a computed property.
-- Because the store state is reactive.
-- Triggering changes simply means committing mutations in component methods.
-
 <div style="page-break-after: always;"></div>
 
-## Single State Tree
+## Getting Vuex `State` into Vue Components
 
-- Vuex uses a **single state tree** - that is, this single object contains all your application level state and serves as the **single source of truth**.
-- The data you store in Vuex follows the same rules as the `data` in a Vue instance.
+Vuex stores are **reactive**, the simplest way to r**etrieve state** from it is simply returning some store state from within a **computed property**.
 
-<div style="page-break-after: always;"></div>
-
-## Getting Vuex State into Vue Components
-
-Vuex stores are **reactive**, the simplest way to **retrieve** state from it is simply returning some store state from within a **computed property**.
+Whenever `this.$store.state.count` changes, it will cause the computed property to **re-evaluate**, and **trigger** associated DOM updates.
 
 ```javascript
 // let's create a Counter component
@@ -140,13 +133,11 @@ const Counter = {
   template: `<div>{{ count }}</div>`,
   computed: {
     count () {
-      return store.state.count
+      return this.$store.state.count
     }
   }
 }
 ```
-
-Whenever `store.state.count` changes, it will cause the computed property to **re-evaluate**, and **trigger** associated DOM updates.
 
 <div style="page-break-after: always;"></div>
 
@@ -156,17 +147,17 @@ Whenever `store.state.count` changes, it will cause the computed property to **r
 - We can make use of the `mapState` helper which generates computed getter functions.
 
 ```javascript
-computed: mapState([
-  // map this.count to store.state.count
-  'count'
-])
+  computed: {
+    // map this.count to store.state.count
+    ...mapState(['count'])
+  }
 ```
 
-- The `mapState` returns an object - to use it in combination with other local computed properties, we'd have to use `object spread operator` (...object) to merge multiple objects into one.
+- The `mapState` returns an object - to use it in combination with other local computed properties, we'd have to use `object spread operator` (`...{...}`) to merge multiple objects into one.
 
 ```javascript
 computed: {
-  localComputed () { /* ... */ },
+  localComputed() { /* ... */ },
   // mix this into the outer object with the object spread operator
   ...mapState({
     // ...
@@ -178,16 +169,7 @@ computed: {
 
 ## Getters
 
-Functions used to return values from the store. Use these when comput­ations need to be performed on the state value before they are passed to the caller.
-
-```javascript
-computed: {
-  doneTodosCount () {
-    return this.$store.state.todos.filter(todo => todo.done).length
-  }
-}
-```
-
+- Functions used to **return values from the store**. Use these when **comput­ations need to be performed on the state value** before they are passed to the caller.
 - Vuex allows us to define `getters` in the store.
 - Like computed properties, a `getter`'s result is cached based on its dependencies, and will only re-evaluate when some of its dependencies have changed.
 
@@ -235,10 +217,11 @@ export default {
 
 ## Mutations
 
-Functions that commit changes to the state, and can process the values being passed before saving them.
+Functions that **commit** changes to the state, and can process the values being passed before saving them.
 
-- The only way to actually change state in a Vuex store is by committing a **mutation**.
-- Vuex mutations are very similar to events: each mutation has a **string type** and a **handler**. The handler function is where we perform actual state modifications:
+- The only way to change `state` in a Vuex store is by committing a **mutation**.
+- Vuex mutations are very similar to events: each mutation has a **string type** and a **handler**.
+- The handler function is where we perform actual `state` modifications:
 
 ```javascript
 const store = new Vuex.Store({
@@ -247,24 +230,18 @@ const store = new Vuex.Store({
   },
   mutations: {
     // In most cases, the `payload` should be an `object` so that it can contain multiple fields,
-    increment (state, payload) {
+    increment(state, payload) {
       state.count += payload
     }
   }
 })
 ```
 
-- Cannot directly call a mutation handler.
-- Think of it more like event registration: "When a mutation with type `increment` is triggered, call this handler."
 - To invoke a mutation handler, you need to call `store.commit` with its type:
 
 ```javascript
 store.commit('increment', 10)
 ```
-
-## Mutations Follow Vue's Reactivity Rules
-
-Since a Vuex store's state is made **reactive by Vue**, when we mutate the state, Vue components observing the state will update automatically.
 
 <div style="page-break-after: always;"></div>
 
@@ -296,9 +273,9 @@ export default {
 
 `Actions` are similar to mutations, the differences being that:
 
-- Instead of mutating the state, actions **commit** mutations.
-- Actions can contain **arbitrary asynchronous operations**(like API calls).
-- Action handlers receive a `context` object which exposes the same set of methods/properties on the store instance
+- Instead of **mutating** the state, actions **commit** mutations.
+- Actions can contain **arbitrary asynchronous operations** (like API calls).
+- Action handlers receive a `context` object which exposes the same set of methods/properties on the store instance.
 - So you can call `context.commit` to commit a mutation, or access the state and getters via `context.state` and `context.getters`.
 
 ```javascript
@@ -313,11 +290,14 @@ const store = new Vuex.Store({
   },
   actions: {
     increment (context) {
+      // do some async tasks
       context.commit('increment')
     }
   }
 })
 ```
+
+<div style="page-break-after: always;"></div>
 
 In practice, we often use ES2015 argument destructuring (opens new window)to simplify the code
 
@@ -333,13 +313,13 @@ actions: {
 
 ## Dispatching Actions
 
-Actions are triggered with the store.dispatch method:
+Actions are triggered with the `store.dispatch` method:
 
 ```javascript
 store.dispatch('increment')
 ```
 
-Actions support the same payload format and object-style dispatch:
+Actions support the **payload format** and **object-style dispatch**:
 
 ```javascript
 // dispatch with a payload
@@ -377,5 +357,11 @@ export default {
   }
 }
 ```
+
+<div style="page-break-after: always;"></div>
+
+## Vuex Diagram
+
+<image src="_resources/vuex-lifecycle.png" alt="vuex-lifecycle">
 
 <div style="page-break-after: always;"></div>
